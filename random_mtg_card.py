@@ -5,6 +5,7 @@ import jinja2
 class RandomMtgArgs(Tap):
     color: str = None
     mode: str = 'text'
+    template_dir: str = './'
 
     def configure(self):
         self.add_argument('-c','--color',help="A color used to reduce the randomness")
@@ -30,8 +31,8 @@ def fetch_card_image(args):
         return False, res.status_code
 
 
-def print_card_image(success: bool, url: str):
-    template_loader = jinja2.FileSystemLoader(searchpath="./")
+def print_card_image(template_dir: str, success: bool, url: str):
+    template_loader = jinja2.FileSystemLoader(searchpath=template_dir)
     template_env = jinja2.Environment(loader=template_loader)
     template = template_env.get_template("card_image.jinja.html")
     print(template.render(url=url,success=success))
@@ -48,7 +49,7 @@ def main(args: RandomMtgArgs):
     if args.mode == 'image':
         request_args['format'] = args.mode
         success, url = fetch_card_image(request_args)
-        print_card_image(success, url)
+        print_card_image(args.template_dir, success, url)
     else:
         print_card_details(fetch_card_info(request_args))
 
