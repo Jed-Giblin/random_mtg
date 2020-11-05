@@ -1,0 +1,11 @@
+<body>
+    {% if not success %}
+        <h1> Sorry, we were unable to fetch your card! We got a {{url}} from the server </h1>
+    {% else %}
+         <h1>Random Card of the day</h1>
+        <div>
+            <p>Hello! Here is your random card!</p>
+            <img src="cid:{{url}}" />
+        </div>
+    {% endif %}
+</body>
